@@ -10,7 +10,29 @@ import random
 
 
 def parse_sipuni():
-    pass
+    start_urls = [
+        "https://apilk.sipuni.com/api/ver2/user/summary",
+        # "https://apilk.sipuni.com/api/ver2/operation/list",
+        "https://apilk.sipuni.com/api/ver2/info/getBalanceInfo"
+    ]
+    api_key = settings.SIPUNI_API_KEY
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    }
+    responses = {}
+    for url in start_urls:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            # print(f"[SIPUNI] {data}")
+            responses[url] = data
+        else:
+            print(f"[SIPUNI] Ошибка: {response.status_code} - {response.text}")
+            responses[url] = None
+    print(f"[SIPUNI] {[response for response in responses.values()]}")
 
 
 def parse_timeweb():
