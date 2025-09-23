@@ -20,7 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sdg8uj&#&8bb%$u)@jiqh08x+(w*#)pv=7mi+@-$a^%cqj#8s!'
+from decouple import config
+
+TIMEWEB_API_KEY = config('TIMEWEB_API_KEY')
+DATADATA_API_TOKEN = config('DATADATA_API_TOKEN')
+DATADATA_API_SECRET = config('DATADATA_API_SECRET')
+PROXY_MARKET_API_KEY = config('PROXY_MARKET_API_KEY')
+YANDEX_CLOUD_ID = config('YANDEX_CLOUD_ID')
+YANDEX_CLOUD_OAUTH_TOKEN = config('YANDEX_CLOUD_OAUTH_TOKEN')
+PROXYLINE_API_KEY = config('PROXYLINE_API_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
