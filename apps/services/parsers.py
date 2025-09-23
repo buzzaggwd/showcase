@@ -1,6 +1,13 @@
 import requests
 from dadata import Dadata
 from django.conf import settings
+import csv
+from io import StringIO
+from bs4 import BeautifulSoup
+import re
+import time
+import random
+
 
 def parse_sipuni():
     pass
@@ -64,6 +71,66 @@ def parse_proxy_market():
             print(f"[PROXY_MARKET] Ошибка: {response.status_code} - {response.text}")
             responses[url] = None
     print(f"[PROXY_MARKET] {[response for response in responses.values()]}")
+
+
+def parse_farpost():
+    spreadsheet_id = settings.FARPOST_SPREADSHEET_ID
+    url = f'https://docs.google.com/spreadsheets/d/{spreadsheet_id}/export?format=csv&gid=0'
+    url_farpost = "https://www.farpost.ru/personal/actual/bulletins"
+    r = requests.get(url)
+    r.raise_for_status()
+
+    reader = csv.reader(StringIO(r.text))
+    rows = list(reader)
+
+    if not rows:
+        raise ValueError("Таблица пустая")
+
+    keys = rows[0]
+    data = []
+
+    for row in rows[1:]:
+        entry = dict(zip(keys, row))
+        data.append(entry)
+
+    for item in data:
+        boobs_value = item["Boobs"]
+        name = item['               ']
+        cookies = {"boobs": boobs_value}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+
+        response = requests.get(url_farpost, cookies=cookies, headers=headers)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        stick_items = soup.find_all("a", class_="service-card-head service-card-head_style_mini")
+
+        total_count = 0
+        total_price = 0
+
+        for item in stick_items:
+            if "Приклеено" in item.text:
+                total_count += 1
+                price_str = item.find("div")["data-writeoff"] if item.find("div") and item.find("div").has_attr("data-writeoff") else None
+                if price_str:
+                    total_price += int(price_str)
+
+        # print(f"Количество объектов с приклеено: {total_count}")
+        # print(f"Общая сумма: {total_price} ₽")
+
+        balance_elem = soup.find("div", class_="personal-balance-info__balance")
+        if balance_elem:
+            balance_text = balance_elem.get_text(strip=True)
+            balance_number = int(re.sub(r"[^\d]", "", balance_text))
+        else:
+            print("Баланс не найден")
+            balance_number=None
+
+        print(f"[FARPOST] Компания {name}. Количество объявлений {total_count} на общую сумму {total_price}. Баланс: {balance_number}")
+        delay = random.uniform(2, 7)
+        # print(f"Ждeм {delay:.2f} секунд...")
+        time.sleep(delay)
 
 
 def get_iam_token(oauth_token):
@@ -135,10 +202,3 @@ def parse_proxyline():
             responses[url] = None
     print(f"[PROXYLINE] {[response for response in responses.values()]}")
 
-
-if __name__ == "__main__":
-    parse_timeweb()
-    parse_dadata()
-    parse_proxy_market()
-    parse_yandex_cloud()
-    parse_proxyline()
