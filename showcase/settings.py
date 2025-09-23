@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 from decouple import config
 
+SIPUNI_API_KEY = config('SIPUNI_API_KEY')
 TIMEWEB_API_KEY = config('TIMEWEB_API_KEY')
 DATADATA_API_TOKEN = config('DATADATA_API_TOKEN')
 DATADATA_API_SECRET = config('DATADATA_API_SECRET')
