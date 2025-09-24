@@ -22,17 +22,18 @@ def parse_sipuni():
         "Accept": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     }
-    responses = {}
+    responses = []
     for url in start_urls:
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             data = response.json()
             # print(f"[SIPUNI] {data}")
-            responses[url] = data
+            responses.append(data)
         else:
             print(f"[SIPUNI] Ошибка: {response.status_code} - {response.text}")
-            responses[url] = None
-    print(f"[SIPUNI] {[response for response in responses.values()]}")
+            responses.append(None)
+    print(f"[SIPUNI] {[response for response in responses]}")
+    return responses
 
 
 def parse_timeweb():
@@ -46,17 +47,18 @@ def parse_timeweb():
         "Accept": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     }
-    responses = {}
+    responses = []
     for url in start_urls:
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             data = response.json()
             # print(f"[TIMEWEB] {data}")
-            responses[url] = data
+            responses.append(data)
         else:
             print(f"[TIMEWEB] Ошибка: {response.status_code} - {response.text}")
-            responses[url] = None
-    print(f"[TIMEWEB] {[response for response in responses.values()]}")
+            responses.append(None)
+    print(f"[TIMEWEB] {[response for response in responses]}")
+    return responses
 
 
 def parse_dadata():
@@ -67,6 +69,7 @@ def parse_dadata():
     balance = dadata.get_balance()
     stats = dadata.get_daily_stats()
     print(f"[DADATA] {balance} {stats}")
+    return balance, stats
 
 
 def parse_proxy_market():
@@ -81,18 +84,19 @@ def parse_proxy_market():
         "Accept": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     }
-    responses = {}
+    responses = []
     for url in start_urls:
         url = f"{url}{api_key}"
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             data = response.json()
             # print(f"[PROXY_MARKET] {data}")
-            responses[url] = data
+            responses.append(data)
         else:
             print(f"[PROXY_MARKET] Ошибка: {response.status_code} - {response.text}")
-            responses[url] = None
-    print(f"[PROXY_MARKET] {[response for response in responses.values()]}")
+            responses.append(None)
+    print(f"[PROXY_MARKET] {[response for response in responses]}")
+    return responses
 
 
 # def parse_farpost():
@@ -177,7 +181,7 @@ def parse_yandex_cloud():
         print("IAM токен не доступен")
         return
 
-    responses = {}
+    responses = []
     for url in start_urls:
         url = f"{url}{id}"
         headers = {
@@ -190,11 +194,12 @@ def parse_yandex_cloud():
         if response.status_code == 200:
             data = response.json()
             # print(f"[YANDEX_CLOUD] {data}")
-            responses[url] = data
+            responses.append(data)
         else:
             print(f"[YANDEX_CLOUD] Ошибка: {response.status_code} - {response.text}")
-            responses[url] = None
-    print(f"[YANDEX_CLOUD] {[response for response in responses.values()]}")
+            responses.append(None)
+    print(f"[YANDEX_CLOUD] {[response for response in responses]}")
+    return responses
 
 
 def parse_proxyline():
@@ -202,7 +207,7 @@ def parse_proxyline():
         "https://panel.proxyline.net/api/balance/?api_key={api_key}",
         "https://panel.proxyline.net/api/ips-count/?api_key={api_key}&ip_version=4&type=dedicated&country=ru",
         "https://panel.proxyline.net/api/proxies/?api_key={api_key}",
-        "https://panel.proxyline.net/api/orders/?api_key={api_key}"
+        # "https://panel.proxyline.net/api/orders/?api_key={api_key}"
     ]
     api_key = settings.PROXYLINE_API_KEY
     headers = {
@@ -211,16 +216,16 @@ def parse_proxyline():
         "Accept": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     }
-    responses = {}
+    responses = []
     for url in start_urls:
         url = url.format(api_key=api_key)
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             data = response.json()
             # print(f"[PROXYLINE] {data}")
-            responses[url] = data
+            responses.append(data)
         else:
             print(f"[PROXYLINE] Ошибка: {response.status_code} - {response.text}")
-            responses[url] = None
-    print(f"[PROXYLINE] {[response for response in responses.values()]}")
-
+            responses.append(None)
+    print(f"[PROXYLINE] {[response for response in responses]}")
+    return responses
