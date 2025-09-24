@@ -15,6 +15,4 @@ from apps.services.service import DataService
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        results = DataService.save_all()
-        for r in results:
-            self.stdout.write(self.style.SUCCESS(r))
+        DataService.save_all()
