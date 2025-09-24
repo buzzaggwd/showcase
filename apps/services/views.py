@@ -6,12 +6,6 @@ from .models import Service, ServiceData
 from .serializers import ServiceSerializer, ServiceDataSerializer
 from .service import DataService
 
-# ------------------------DB--------------------------
-# class SaveSipuniDataView(APIView):
-#     def get(self, request):
-#         result = DataService.save_data_sipuni()
-#         return Response({"message": result})
-
 
 # -----------------------API--------------------------
 class GetServiceInfoView(APIView):
@@ -45,8 +39,22 @@ class GetServiceDataInfoView(APIView):
             except ValueError:
                 return Response({"error": "Неверный формат параметра 'services'. Используйте ?services=1,2,3"}, status=400)
 
+        latest_ids = []
+        for service_id in queryset.values_list('service_id', flat=True).distinct():
+            latest = queryset.filter(service_id=service_id).order_by('-created_at').first()
+            if latest:
+                latest_ids.append(latest.id)
+        
+        queryset = queryset.filter(id__in=latest_ids)
+
         serializer = ServiceDataSerializer(
             instance=queryset,
-            many=True
+            many=True,
         )
-        return Response(serializer.data)
+
+        filtered_data = []
+        for item in serializer.data:
+            filtered_item = {k: v for k, v in item.items() if v is not None}
+            filtered_data.append(filtered_item)
+
+        return Response(filtered_data)
