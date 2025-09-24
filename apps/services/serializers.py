@@ -4,10 +4,12 @@ from .models import Service, ServiceData
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = "__all__"
-        # fields = ["id", "name", "is_active", "description", "created_at"]
+        # fields = "__all__"
+        exclude = ("api_key",)
+
 
 class ServiceDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceData
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ("raw_data",)
