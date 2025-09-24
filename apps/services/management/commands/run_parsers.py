@@ -15,4 +15,6 @@ from apps.services.service import DataService
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        DataService.save_all()
+        results = DataService.save_all()
+        for r in results:
+            print(r)
