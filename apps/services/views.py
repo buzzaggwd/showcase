@@ -35,7 +35,7 @@ class GetServiceDataInfoView(APIView):
         if service_ids:
             try:
                 ids = [int(x) for x in service_ids.split(",") if x.strip().isdigit()]
-                queryset = queryset.filter(service_id__in=ids)
+                queryset = queryset.filter(service_id__in=ids).order_by('service_id')
             except ValueError:
                 return Response({"error": "Неверный формат параметра 'services'. Используйте ?services=1,2,3"}, status=400)
 
