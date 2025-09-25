@@ -9,6 +9,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 
 class ServiceDataSerializer(serializers.ModelSerializer):
+    service_name = serializers.CharField(source="service.name", read_only=True)
     class Meta:
         model = ServiceData
         # fields = "__all__"
