@@ -2,6 +2,8 @@ from .models import Service, ServiceData
 from .parsers import *
 from django.conf import settings
 from datetime import datetime
+from django.utils import timezone
+from datetime import timedelta
 
 class DataService:
 
@@ -74,12 +76,19 @@ class DataService:
         try:
             first_response = raw_data[0]["finances"]
 
+            hours_left = first_response.get("hours_left", 0)
+        
+            subscription_end = None
+            if hours_left and hours_left > 0:
+                subscription_end = timezone.now() + timedelta(hours=hours_left)
+
             service_data = ServiceData.objects.create(
                 service=service,
                 balance=float(first_response.get("balance", 0)),
                 currency=first_response.get("currency", "RUB"),
                 total_paid=first_response.get("total_paid", 0),
                 hours_left=first_response.get("hours_left", 0),
+                subscription_end=subscription_end,
                 hourly_cost=first_response.get("hourly_cost", 0),
                 monthly_cost=first_response.get("monthly_cost", 0),
                 raw_data=raw_data

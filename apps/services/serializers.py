@@ -12,4 +12,4 @@ class ServiceDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceData
         # fields = "__all__"
-        exclude = ("raw_data",)
+        exclude = ("raw_data", "hours_left",)
