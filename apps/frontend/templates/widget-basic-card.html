@@ -50,7 +50,13 @@
             <div class="header-content">
                 <div class="header-left d-flex">
                     <div class="nav-text">Дата последнего обновления:</div>
-                    <div class="nav-text">20.09.2025</div>
+                    <div class="nav-text">
+                        {% if last_updated %}
+                            {{ last_updated|slice:":10" }} {{ last_updated|slice:"11:16" }}
+                        {% else %}
+                            Нет данных
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="header-right"></div>
             </div>
@@ -115,14 +121,12 @@
                         <hr class="my-2">
 
                         <!-- Список площадок -->
+                        {% for service in history %}
                         <div class="form-check">
-                            <input class="form-check-input platform-option" type="checkbox" value="netflix" id="platformNetflix">
-                            <label class="form-check-label" for="platformNetflix">Roblox</label>
+                            <input class="form-check-input platform-option" type="checkbox" value="{{ service.name }}" id="platform{{ service.name }}">
+                            <label class="form-check-label" for="platform{{ service.name }}">{{ service.service_name }}</label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input platform-option" type="checkbox" value="spotify" id="platformSpotify">
-                            <label class="form-check-label" for="platformSpotify">Yandex Cloud</label>
-                        </div>
+                        {% endfor %}
                         <hr class="my-2">
 
                         <!-- Кнопка ОК -->
@@ -163,20 +167,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {% for service in history %}
                                                 <tr>
-                                                    <td>
-                                                       Yandex Cloud</td>
-                                                    <td><span>-1000$</span>
-                                                    </td>
-                                                    <td>+500$</td>
+                                                    <td>{{ service.service_name }}</td>
+                                                    <td><span>-{{ service.total_spent }}{{ service.currency }}</span></td>                                                    </td>
+                                                    <td><span>+{{ service.total_added }}{{ service.currency }}</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        Roblox</td>
-                                                    <td><span>-700$</span>
-                                                    </td>
-                                                    <td>+900$</td>
-                                                </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
@@ -200,72 +197,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
-                                                       Yandex Cloud</td>
-                                                    <td><span>10.09.2025</span>
-                                                    </td>
-                                                    <td><span>-</span>
-                                                    </td>
-                                                    <td><i class="fa fa-circle-o text-success f-s-12 m-r-10"></i>Пополнение</td>
-                                                    <td><span>+84$</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Roblox</td>
-                                                    <td><span>10.09.2025</span>
-                                                    </td>
-                                                    <td><span>-</span>
-                                                    </td>
-                                                    <td><i class="fa fa-circle-o text-success f-s-12 m-r-10"></i>Пополнение</td>
-                                                    <td><span>+36$</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Yandex Cloud</td>
-                                                    <td><span>10.09.2025</span>
-                                                    </td>
-                                                    <td><span>-</span>
-                                                    </td>
-                                                    <td><i class="fa fa-circle-o text-danger f-s-12 m-r-10"></i>Списание</td>
-                                                    <td><span>-55$</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Roblox</td>
-                                                    <td><span>10.09.2025</span>
-                                                    </td>
-                                                    <td><span>-</span>
-                                                    </td>
-                                                    <td><i class="fa fa-circle-o text-success f-s-12 m-r-10"></i>Пополнение</td>
-                                                    <td><span>+45$</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Yandex Cloud</td>
-                                                    <td><span>10.09.2025</span>
-                                                    </td>
-                                                    <td><span>-</span>
-                                                    </td>
-                                                    <td><i class="fa fa-circle-o text-danger f-s-12 m-r-10"></i>Списание</td>
-                                                    <td><span>-63$</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Roblox</td>
-                                                    <td><span>10.09.2025</span>
-                                                    </td>
-                                                    <td><span>-</span>
-                                                    </td>
-                                                    <td><i class="fa fa-circle-o text-success f-s-12 m-r-10"></i>Пополнение</td>
-                                                    <td><span>+38$</span>
-                                                    </td>
-                                                </tr>
+                                                {% for entry in history_entries %}
+                                                    <tr>
+                                                        <td>{{ entry.service_name }}</td>
+                                                        <td>{{ entry.date|date:"d.m.Y H:i" }}</td>
+                                                        <td>{{ entry.info }}</td>
+                                                        <td>
+                                                            <i class="fa fa-circle-o f-s-12 m-r-10 {% if entry.type == 'Пополнение' %}text-success{% else %}text-danger{% endif %}"></i>
+                                                            {{ entry.type }}
+                                                        </td>
+                                                        <td>{% if entry.type == 'Пополнение' %}+{% else %}-{% endif %}{{ entry.amount }} {{ entry.currency }}</td>
+                                                    </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
