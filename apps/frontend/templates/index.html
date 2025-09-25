@@ -1,20 +1,130 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Premium Quality and Responsive UI for Dashboard.">
-  <meta name="author" content="NineKit">
-
-  <title>Ameen - Bootstrap Admin Dashboard HTML Template</title>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Витрина</title>
+    <!-- Favicon icon -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <script src="{% static 'js/modernizr-3.6.0.min.js' %}"></script>
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}">
 </head>
 
-<body>
-  <script>
-    window.location.replace("template-vertical-nav/index.html");
-  </script>
+<body class="v-light vertical-nav fix-header fix-sidebar">
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10"/>
+            </svg>
+        </div>
+    </div>
+    <div id="main-wrapper">
+        <!-- header -->
+        <div class="header">
+            <div class="nav-header">
+                <div class="brand-logo">
+                    <a href="{% url 'index' %}">
+                        <b><img src="{% static 'img/logo.png' %}" alt=""></b>
+                        <span class="brand-title"><img src="{% static 'img/logo-text.png' %}" alt=""></span>
+                    </a>
+                </div>
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="line"></span> 
+                        <span class="line"></span> 
+                        <span class="line"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-content">
+                <div class="header-left d-flex">
+                    <div class="nav-text">Дата последнего обновления:</div>
+                    <div class="nav-text">20.09.2025</div>
+                </div>
+                <div class="header-right"></div>
+            </div>
+        </div>
+        <!-- #/ header -->
+
+        <!-- sidebar -->
+        <div class="nk-sidebar">
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li><a href="{% url 'index' %}"><i class="mdi mdi-view-dashboard"></i> <span class="nav-text">Dashboard</span></a></li>
+                    <li><a href="{% url 'widget-basic-card' %}"><i class="mdi mdi-widgets"></i> <span class="nav-text">History</span></a></li>
+                    <li>
+                        <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-google-pages"></i> <span class="nav-text">Farpost</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="{% url 'farpost' %}">Dashboard</a></li>
+                            <li><a href="{% url 'farpost-history' %}">History</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- #/ sidebar -->
+
+        <!-- content body -->
+        <div class="content-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Потрачено за месяц:</h4>
+                                <div class="f-s-30 f-w-300 text-success">$350 <span class="f-s-16 text-uppercase">USD</span></div>
+                                <canvas id="sales-graph-top"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Example card -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <img src="{% static 'img/check-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
+                                <h4 class="m-t-15 m-b-2">Yandex Cloud</h4>
+                                <p class="text-muted">БАЛАНС</p>
+                                <ul class="list-inline m-t-15">$3500</ul>
+                                <div class="row">
+                                    <div class="col-12 border-bottom-1 p-t-20 p-b-10"><span class="pull-left f-w-600">Подписка до:</span> <span class="pull-right">30.07.2011</span></div>
+                                    <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Остаток ресурсов:</span> <span class="pull-right">15 прокси</span></div>
+                                    <div class="col-12 p-t-10 p-b-10"><span class="pull-left f-w-600">Дополнительная информация:</span> <span class="pull-right">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <img src="{% static 'img/exclamation-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
+                                <h4 class="m-t-15 m-b-2">Yandex Cloud</h4>
+                                <p class="text-muted">СКОРО СПИСАНИЕ СРЕДСТВ</p>
+                                <ul class="list-inline m-t-15">$3500</ul>
+                                <div class="row">
+                                    <div class="col-12 border-bottom-1 p-t-20 p-b-10"><span class="pull-left f-w-600">Подписка до:</span> <span class="pull-right">30.07.2011</span></div>
+                                    <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Остаток ресурсов:</span> <span class="pull-right">15 прокси</span></div>
+                                    <div class="col-12 p-t-10 p-b-10"><span class="pull-left f-w-600">Дополнительная информация:</span> <span class="pull-right">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Другие карточки аналогично -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/plugins/common/common.min.js' %}"></script>
+    <script src="{% static 'js/custom.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/chartjs/Chart.bundle.js' %}"></script>
+    <script src="{% static 'js/dashboard-1.js' %}"></script>
 </body>
 
 </html>

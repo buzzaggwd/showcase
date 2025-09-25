@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-100" id="login-page1">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Витрина</title>
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon.png' %}">
+
+    <!-- Custom Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- Modernizr -->
+    <script src="{% static 'js/modernizr-3.6.0.min.js' %}"></script>
+</head>
+
+<body class="h-100">
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20"
+                        fill="none" stroke-width="3" stroke-miterlimit="10"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="login-bg h-100">
+        <div class="container h-100">
+            <div class="row justify-content-center h-100">
+                <div class="col-xl-6">
+                    <div class="form-input-content">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="text-center m-t-15">Log into Your Account</h4>
+
+                                <!-- Форма входа -->
+                                <form method="post" class="m-t-30 m-b-30">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="id_username">Login</label>
+                                        <input type="text" name="username" id="id_username" class="form-control" placeholder="Login" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_password">Password</label>
+                                        <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
+                                    </div>
+                                    <div class="text-center m-b-15 m-t-15">
+                                        <button type="submit" class="btn btn-primary">Sign in</button>
+                                    </div>
+                                </form>
+                                <!-- /Форма входа -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common JS -->
+    <script src="{% static 'assets/plugins/common/common.min.js' %}"></script>
+
+    <!-- Custom script -->
+    <script src="{% static 'js/custom.min.js' %}"></script>
+</body>
+
+</html>
