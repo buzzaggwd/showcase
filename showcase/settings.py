@@ -134,3 +134,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Формат даты для REST Framework
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%d.%m.%Y %H:%M",
+    'DATE_FORMAT': "%d.%m.%Y",
+    'TIME_FORMAT': "%H:%M",
+}

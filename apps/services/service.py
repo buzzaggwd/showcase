@@ -25,15 +25,22 @@ class DataService:
             first_response = raw_data[0]["data"]
             second_response = raw_data[1]["data"]
 
-            subscription_end = None
-            if first_response.get("licenseDateEnd"):
-                subscription_end = datetime.strptime(first_response["licenseDateEnd"], "%Y.%m.%d")
+            license_date_end = None
+            license_date_str = first_response.get("licenseDateEnd")
+            
+            if license_date_str:
+                try:
+                    license_date_end = datetime.strptime(license_date_str, "%Y.%m.%d")
+                    # license_date_end = timezone.make_aware(license_date_end)
+                except ValueError as e:
+                    print(f"Ошибка парсинга даты: {e}")
+                    license_date_end = None
 
             service_data = ServiceData.objects.create(
                 service=service,
                 balance=float(second_response.get("totalBalance", 0)),
                 currency="RUB" if first_response.get("currency") == "RUR" else first_response.get("currency", "RUB"),
-                subscription_end=subscription_end,
+                subscription_end=license_date_end,
                 raw_data=raw_data
             )
             
@@ -219,15 +226,11 @@ class DataService:
             second_response = raw_data[1]
             third_response = raw_data[2]
 
-            subscription_end = None
-            if third_response.get("results") and third_response["results"][0].get("date_end"):
-                subscription_end = datetime.fromisoformat(third_response["results"][0]["date_end"])
-
             service_data = ServiceData.objects.create(
                 service=service,
                 balance=float(first_response.get("balance", 0)),
                 currency="RUB",
-                subscription_end=subscription_end,
+                subscription_end=third_response["results"][0].get("date_end"),
                 proxies_count=second_response.get("count", 0),
                 active_proxies_count=third_response.get("count", 0),
                 raw_data=raw_data
