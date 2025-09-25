@@ -30,17 +30,3 @@ class ServiceData(models.Model):
     error_message = models.TextField(null=True, blank=True)
     raw_data = models.JSONField(default=dict) # Полные данные от API всех сервисов
     created_at = models.DateTimeField(auto_now_add=True)
-
-
-# class FarpostCompany(models.Model):
-#     service_data = models.ForeignKey(ServiceData, on_delete=models.CASCADE, related_name='farpost_companies')
-#     company_name = models.CharField(max_length=255)
-#     ads_count = models.IntegerField(default=0)
-#     ads_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-#     balance = models.DecimalField(max_digits=10, decimal_places=2)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-class ServiceDataHistory(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    balance = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateField(auto_now_add=True)
