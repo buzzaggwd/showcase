@@ -128,7 +128,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# Пути для статических файлов
+STATIC_URL = '/static/'
+
+# Пути, где Django будет искать статические файлы при DEBUG=True
+# По умолчанию, django.contrib.staticfiles ищет их в apps/*/static/
+STATICFILES_DIRS = [
+    # Если есть общие статические файлы вне приложений, укажи здесь
+]
+
+# Путь, куда собирать статические файлы при collectstatic
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
