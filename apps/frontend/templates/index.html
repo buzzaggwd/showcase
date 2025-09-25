@@ -42,7 +42,13 @@
             <div class="header-content">
                 <div class="header-left d-flex">
                     <div class="nav-text">Дата последнего обновления:</div>
-                    <div class="nav-text">20.09.2025</div>
+                    <div class="nav-text">
+                        {% if last_updated %}
+                            {{ last_updated|slice:":10" }} {{ last_updated|slice:"11:16" }}
+                        {% else %}
+                            Нет данных
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="header-right"></div>
             </div>
@@ -75,7 +81,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Потрачено за месяц:</h4>
-                                <div class="f-s-30 f-w-300 text-success">$350 <span class="f-s-16 text-uppercase">USD</span></div>
+                                <div class="f-s-30 f-w-300 text-success">
+                                    {% if history %}
+                                        {{ history.total_paid }} {{ history.currency }}</div>
+                                    {% else %}
+                                        Нет данных
+                                    {% endif %}
+                                </div>
                                 <canvas id="sales-graph-top"></canvas>
                             </div>
                         </div>
@@ -84,36 +96,46 @@
 
                 <div class="row">
                     <!-- Example card -->
+                    {% for service in service_data %}
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-body text-center">
-                                <img src="{% static 'img/check-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
-                                <h4 class="m-t-15 m-b-2">Yandex Cloud</h4>
+                                {% if service.balance > 100.00 %}
+                                    <img src="{% static 'img/check-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
+                                {% else %}
+                                    <img src="{% static 'img/exclamation-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
+                                {% endif %}
+                                <h4 class="m-t-15 m-b-2">{{ service.service_name }}</h4>
                                 <p class="text-muted">БАЛАНС</p>
-                                <ul class="list-inline m-t-15">$3500</ul>
+                                <ul class="list-inline m-t-15">{{ service.balance }} {{ service.currency }}</ul>
                                 <div class="row">
-                                    <div class="col-12 border-bottom-1 p-t-20 p-b-10"><span class="pull-left f-w-600">Подписка до:</span> <span class="pull-right">30.07.2011</span></div>
-                                    <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Остаток ресурсов:</span> <span class="pull-right">15 прокси</span></div>
-                                    <div class="col-12 p-t-10 p-b-10"><span class="pull-left f-w-600">Дополнительная информация:</span> <span class="pull-right">-</span></div>
+                                    {% if service.subscription_end is not None %}
+                                        <div class="col-12 border-bottom-1 p-t-20 p-b-10"><span class="pull-left f-w-600">Подписка до:</span> <span class="pull-right">{{ service.subscription_end }}</span></div>
+                                    {% endif %}
+                                    {% if service.tokens_remaining is not None %}
+                                        <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Остаток токенов:</span> <span class="pull-right">{{ service.tokens_remaining }} токенов</span></div>
+                                    {% endif %}
+                                    {% if service.proxies_count is not None %}
+                                        <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Количество прокси:</span> <span class="pull-right">{{ service.proxies_count }} прокси</span></div>
+                                    {% endif %}
+                                    {% if service.active_proxies_count is not None %}
+                                        <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Активных прокси:</span> <span class="pull-right">{{ service.active_proxies_count }} прокси</span></div>
+                                    {% endif %}
+                                    {% if service.hourly_cost is not None %}
+                                        <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Почасовая оплата:</span> <span class="pull-right">{{ service.hourly_cost }} рублей</span></div>
+                                    {% endif %}
+                                    {% if service.monthly_cost is not None %}
+                                        <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Ежемесячная оплата:</span> <span class="pull-right">{{ service.monthly_cost }} рублей</span></div>
+                                    {% endif %}
+                                    {% if service.total_paid is not None %}
+                                        <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Общая оплата:</span> <span class="pull-right">{{ service.total_paid }} рублей</span></div>
+                                    {% endif %}
+                                    <!-- <div class="col-12 p-t-10 p-b-10"><span class="pull-left f-w-600">Дополнительная информация:</span> <span class="pull-right">-</span></div> -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <img src="{% static 'img/exclamation-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
-                                <h4 class="m-t-15 m-b-2">Yandex Cloud</h4>
-                                <p class="text-muted">СКОРО СПИСАНИЕ СРЕДСТВ</p>
-                                <ul class="list-inline m-t-15">$3500</ul>
-                                <div class="row">
-                                    <div class="col-12 border-bottom-1 p-t-20 p-b-10"><span class="pull-left f-w-600">Подписка до:</span> <span class="pull-right">30.07.2011</span></div>
-                                    <div class="col-12 border-bottom-1 p-t-10 p-b-10"><span class="pull-left f-w-600">Остаток ресурсов:</span> <span class="pull-right">15 прокси</span></div>
-                                    <div class="col-12 p-t-10 p-b-10"><span class="pull-left f-w-600">Дополнительная информация:</span> <span class="pull-right">-</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                     <!-- Другие карточки аналогично -->
                 </div>
             </div>

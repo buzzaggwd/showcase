@@ -10,7 +10,7 @@ class DataService:
     @staticmethod
     def save_data_sipuni():
         service, created = Service.objects.get_or_create(
-            name="sipuni",
+            name="Sipuni",
             defaults={
                 "api_key": settings.SIPUNI_API_KEY,
                 "description": "Телефония",
@@ -60,7 +60,7 @@ class DataService:
     @staticmethod
     def save_data_timeweb():
         service, created = Service.objects.get_or_create(
-            name="timeweb",
+            name="TimeWeb",
             defaults={
                 "api_key": settings.TIMEWEB_API_KEY,
                 "description": "Хостинг",
@@ -141,7 +141,7 @@ class DataService:
     @staticmethod
     def save_data_proxy_market():
         service, created = Service.objects.get_or_create(
-            name="proxy_market",
+            name="Proxy Market",
             defaults={
                 "api_key": settings.PROXY_MARKET_API_KEY,
                 "description": "Прокси",
@@ -180,7 +180,7 @@ class DataService:
     @staticmethod
     def save_data_yandex_cloud():
         service, created = Service.objects.get_or_create(
-            name="yandex_cloud",
+            name="Yandex Cloud",
             defaults={
                 "api_key": f"{settings.YANDEX_CLOUD_ID} - {settings.YANDEX_CLOUD_OAUTH_TOKEN}",
                 "description": "Облачные хранилища",
@@ -217,7 +217,7 @@ class DataService:
     @staticmethod
     def save_data_proxyline():
         service, created = Service.objects.get_or_create(
-            name="proxyline",
+            name="ProxyLine",
             defaults={
                 "api_key": settings.PROXYLINE_API_KEY,
                 "description": "Прокси",

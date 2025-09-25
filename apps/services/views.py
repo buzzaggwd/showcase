@@ -54,12 +54,17 @@ class GetServiceDataInfoView(APIView):
             many=True,
         )
 
+        last_updated = ServiceData.objects.order_by("-created_at").first()
+
         filtered_data = []
         for item in serializer.data:
             filtered_item = {k: v for k, v in item.items() if v is not None}
             filtered_data.append(filtered_item)
 
-        return Response(filtered_data)
+        return Response({
+            "services": filtered_data, 
+            "last_updated": last_updated.created_at if last_updated else None
+        })
 
 
 class GetServiceDataHistoryInfoView(APIView):
