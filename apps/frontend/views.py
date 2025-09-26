@@ -18,16 +18,16 @@ def index(request):
     for s in services:
         val = s.get("balance")
         try:
-            s['balance'] = float(val) if val not in (None, "") else 0.0
+            s["balance"] = float(val) if val not in (None, "") else 0.0
         except (ValueError, TypeError):
-            s['balance'] = 0.0
+            s["balance"] = 0.0
 
     total_spent = 0
     total_added = 0
     currency = None
 
     for service in services_obj:
-        history_list = ServiceData.objects.filter(service_id=service.id).order_by('created_at')
+        history_list = ServiceData.objects.filter(service_id=service.id).order_by("created_at")
         if not history_list.exists():
             continue
 
@@ -113,7 +113,7 @@ def widget_basic_card(request):
     history_entries = []
 
     for service in services:
-        history_list = ServiceData.objects.filter(service_id=service.id).order_by("created_at")
+        history_list = ServiceData.objects.filter(service_id=service.id)
         prev_balance = None
         for entry in history_list:
             if prev_balance is not None:
@@ -128,6 +128,8 @@ def widget_basic_card(request):
                     "currency": entry.currency or "—",
                 })
             prev_balance = entry.balance
+
+    history_entries.sort(key=lambda x: x["date"], reverse=True)
 
     last_updated = data.get("last_updated")
 
