@@ -1,6 +1,11 @@
 from django.shortcuts import render
 import requests
 from apps.services.models import Service, ServiceData
+from django.utils.dateformat import format as date_format
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from django.utils import timezone
+from datetime import timedelta
 
 def index(request):
     response = requests.get("http://127.0.0.1:8000/services/api/services/data/")
@@ -37,16 +42,38 @@ def index(request):
                 total_spent += abs(diff)
             prev_balance = entry.balance
 
+    chart_labels = []
+    chart_values = []
+
+    for service in services_obj:
+        one_month_ago = timezone.now() - timedelta(days=30)
+        history_list = ServiceData.objects.filter(service_id=service.id, created_at__gte=one_month_ago).order_by("created_at")
+        for h in history_list:
+            if h.created_at and h.balance is not None:
+                chart_labels.append(h.created_at.strftime("%Y-%m-%d"))
+                chart_values.append(float(h.balance))
+
+    min_val = min(chart_values) if chart_values else 0
+    max_val = max(chart_values) if chart_values else 0
+
     history = {
         "total_spent": round(total_spent, 2),
         "total_added": round(total_added, 2),
-        "currency": currency
+        "currency": currency,
+    }
+
+    chart_data = {
+        "labels": chart_labels,
+        "values": chart_values,
+        "min_val": min_val,
+        "max_val": max_val,
     }
 
     return render(request, 'index.html', {
         "service_data": services,
         "history": history,
-        "last_updated": last_updated
+        "last_updated": last_updated,
+        "chart_data": json.dumps(chart_data, cls=DjangoJSONEncoder)
     })
 
 
