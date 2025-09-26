@@ -100,7 +100,7 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-body text-center">
-                                {% if service.balance > 100.00 %}
+                                {% if service.balance > 100.00 or service.subscription_end == "10.10.2025 00:00" %}
                                     <img src="{% static 'img/check-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
                                 {% else %}
                                     <img src="{% static 'img/exclamation-mark.png' %}" class="rounded-circle m-t-15 w-75px" alt="">
@@ -146,6 +146,9 @@
     <script src="{% static 'assets/plugins/common/common.min.js' %}"></script>
     <script src="{% static 'js/custom.min.js' %}"></script>
     <script src="{% static 'assets/plugins/chartjs/Chart.bundle.js' %}"></script>
+    <script id="chart-data" type="application/json">
+        {{ chart_data|safe }}
+    </script>
     <script src="{% static 'js/dashboard-1.js' %}"></script>
 </body>
 

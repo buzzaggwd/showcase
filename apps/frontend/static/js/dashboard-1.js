@@ -4,13 +4,16 @@ $(function() {
     // Sales Graph Top
     var ctx = document.getElementById("sales-graph-top");
     ctx.height = 100;
+
+    var chartData = JSON.parse(document.getElementById("chart-data").textContent);
+
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+            labels: chartData.labels,
             datasets: [{
                 label: "Потрачено",
-                data: [28, 35, 36, 48, 46, 42, 60], // <-- числа без $
+                data: chartData.values, // <-- числа без $
                 backgroundColor: "rgba(110, 211, 207, 0.12)",
                 borderColor: "#6ed3cf",
                 borderWidth: 3,
@@ -30,7 +33,7 @@ $(function() {
                 intersect: false,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return tooltipItem.yLabel + "$"; // <-- добавляем $
+                        return tooltipItem.yLabel + "₽"; // <-- добавляем ₽
                     }
                 }
             },
@@ -52,8 +55,10 @@ $(function() {
                         drawBorder: false
                     },
                     ticks: {
+                        min: chartData.min_val, // <-- минимальное значение
+                        max: chartData.max_val, // <-- максимальное значение
                         callback: function(value) {
-                            return value + "$"; // <-- добавляем $ на оси
+                            return value + "₽";
                         }
                     }
                 }]
