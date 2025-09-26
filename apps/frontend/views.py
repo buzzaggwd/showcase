@@ -51,6 +51,9 @@ def index(request):
 
 
 def widget_basic_card(request):
+    response = requests.get("http://127.0.0.1:8000/services/api/services/data/")
+    data = response.json() if response.status_code == 200 else {}
+
     services = Service.objects.all()
     services_history = []
 
@@ -99,8 +102,7 @@ def widget_basic_card(request):
                 })
             prev_balance = entry.balance
 
-    last_updated_entry = ServiceData.objects.order_by("-created_at").first()
-    last_updated = last_updated_entry.created_at if last_updated_entry else None
+    last_updated = data.get("last_updated")
 
     return render(request, 'widget-basic-card.html', {
         "history": services_history,
